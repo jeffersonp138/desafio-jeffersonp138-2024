@@ -8,7 +8,7 @@ class RecintosZoo {
           { animalNome: 'CROCODILO', tamanhoAnimal: 3, bioma: 'rio', carnivoro: true },
           { animalNome: 'MACACO', tamanhoAnimal: 1, bioma: ['savana', 'floresta'], carnivoro: false },
           { animalNome: 'GAZELA', tamanhoAnimal: 2, bioma: 'saavana', carnivoro: false},
-          { animalNome: 'HIPOPOTAMO', tamanhoAnimal: 3, bioma: ['rio', 'savana'], carnivoro: false }
+          { animalNome: 'HIPOPOTAMO', tamanhoAnimal: 4, bioma: ['rio', 'savana'], carnivoro: false }
         ];
     
         // Lista de recintos disponiveis no zoológico
@@ -50,6 +50,16 @@ class RecintosZoo {
         if (animalPermitido.carnivoro && recinto.animaisAlocados.length > 0) {
             const outrosAnimais = recinto.animaisAlocados.filter(([nome]) => nome !== animal.toUpperCase());
             if (outrosAnimais.length > 0) return false; // Carnívoro não pode conviver com outras espécies
+        }
+
+        // Regra especial do HIPOPOTAMO
+        if (animal === 'HIPOPOTAMO') {
+            const biomaSavanaRio = Array.isArray(recinto.bioma) && recinto.bioma.includes('savana') && recinto.bioma.includes('rio');
+            
+            // Se o bioma não for savana e rio, e houver outros animais, o hipopótamo não pode ser alocado
+            if (!biomaSavanaRio && recinto.animaisAlocados.length > 0) {
+                return false;
+            }
         }
 
         // Calcular espaço ocupado no recinto
